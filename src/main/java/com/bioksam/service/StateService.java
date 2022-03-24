@@ -9,6 +9,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.BadRequestException;
+import javax.ws.rs.WebApplicationException;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,18 +30,12 @@ public class StateService {
 
     public State findById(Long id){
         Optional<State> obj = Optional.ofNullable(repo.findById(id));
-        return obj.orElseThrow(()-> new BadRequestException("Id " +id+ " não existe"));
+        return obj.orElseThrow(()-> new WebApplicationException("Cidade com id "+id+" não existe", 404));
     }
 
     public void update(Long id, State state){
         State onUpdate = findById(id);
-
-        onUpdate.setName(state.getName());
-        onUpdate.setUf(state.getUf());
-        System.out.println("Depois:\n id "+onUpdate.id
-            +"nome: "+onUpdate.getName()
-            +"UF: "+onUpdate.getUf());
-        repo.persist(onUpdate);
+        persist(onUpdate);
     }
 
     public Long amount(){

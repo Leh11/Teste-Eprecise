@@ -17,10 +17,10 @@ public class StateController {
     StateService service;
 
     @GET
-    @Path("/findByPage")
+    @Path("/findStateByPage")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getList(@DefaultValue("0") @QueryParam("page") int page,
-                               @DefaultValue("5") @QueryParam("size") int size){
+                               @DefaultValue("20") @QueryParam("size") int size){
         return Response.ok(service.find(page, size)).build();
     }
 
@@ -32,7 +32,7 @@ public class StateController {
     }
 
     @GET
-    @Path("/findState")
+    @Path("/findStateById")
     @Produces(MediaType.APPLICATION_JSON)
     public State findById(@QueryParam("id") Long id){
         return service.findById(id);
@@ -47,7 +47,7 @@ public class StateController {
     }
 
     @PUT
-    @Path("/{id}")
+    @Path("/updateState")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@QueryParam("id") Long id, State state){

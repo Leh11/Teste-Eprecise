@@ -4,6 +4,7 @@ import com.bioksam.model.City;
 import com.bioksam.service.CityService;
 
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -15,10 +16,10 @@ public class CityController {
     CityService service;
 
     @GET
-    @Path("/findByPage")
+    @Path("/findCityByPage")
     @Produces(MediaType.APPLICATION_JSON)
     public Response findAll(@DefaultValue("0") @QueryParam("page") int page,
-                               @DefaultValue("3") @QueryParam("size") int size){
+                               @DefaultValue("10") @QueryParam("size") int size){
         return Response.ok(service.find(page, size)).build();
     }
 
@@ -30,10 +31,17 @@ public class CityController {
     }
 
     @GET
-    @Path("/findCity")
+    @Path("/findCityById")
     @Produces(MediaType.APPLICATION_JSON)
     public City findById(@QueryParam("id") Long id){
         return service.findById(id);
+    }
+
+    @GET
+    @Path("/findCityByName")
+    @Produces(MediaType.APPLICATION_JSON)
+    public City findByName(@QueryParam("name") String name){
+        return service.findByName(name);
     }
 
     @POST
@@ -45,7 +53,7 @@ public class CityController {
     }
 
     @PUT
-    @Path("/{id}")
+    @Path("/updateCity")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@QueryParam("id") Long id, City city){
