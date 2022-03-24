@@ -1,8 +1,9 @@
 package com.bioksam.service;
 
+import com.bioksam.model.City;
 import com.bioksam.model.State;
+import com.bioksam.repository.CityRepo;
 import com.bioksam.repository.StateRepo;
-import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.panache.common.Page;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -13,33 +14,32 @@ import java.util.List;
 import java.util.Optional;
 
 @ApplicationScoped
-public class StateService {
+public class CityService {
 
     @Inject
-    StateRepo repo;
+    CityRepo repo;
 
     @Transactional
-    public void persist(State state){
-        repo.persist(state);
+    public void persist(City city){
+        repo.persist(city);
     }
 
-    public List<State> find(int page, int size){
+    public List<City> find(int page, int size){
+
         return  repo.findAll().page(Page.of(page, size)).list();
     }
 
-    public State findById(Long id){
-        Optional<State> obj = Optional.ofNullable(repo.findById(id));
+    public City findById(Long id){
+        Optional<City> obj = Optional.ofNullable(repo.findById(id));
         return obj.orElseThrow(()-> new BadRequestException("Id " +id+ " não existe"));
     }
 
-    public void update(Long id, State state){
-        State onUpdate = findById(id);
+    public void update(Long id, City city){
+        City onUpdate = findById(id);
 
-        onUpdate.setName(state.getName());
-        onUpdate.setUf(state.getUf());
-        System.out.println("Depois:\n id "+onUpdate.id
-            +"nome: "+onUpdate.getName()
-            +"UF: "+onUpdate.getUf());
+        onUpdate.setName(city.getName());
+        onUpdate.setSym(city.getSym());
+        onUpdate.setState(city.getState());
         repo.persist(onUpdate);
     }
 
